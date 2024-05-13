@@ -1,4 +1,4 @@
-defmodule Golex.Counter do
+defmodule Distro.Counter do
   use GenServer, restart: :transient
 
   def start_link([id]) do
@@ -33,6 +33,6 @@ defmodule Golex.Counter do
   end
 
   defp via_tuple(coord) do
-    {:via, Horde.Registry, {Golex.CounterRegistry, coord}}
+    {:via, Horde.Registry, {Distro.CounterRegistry, coord}}
   end
 end

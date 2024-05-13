@@ -1,4 +1,4 @@
-defmodule Golex.MixProject do
+defmodule Distro.MixProject do
   use Mix.Project
 
   def project do
@@ -15,7 +15,7 @@ defmodule Golex.MixProject do
   def application do
     [
       extra_applications: [:logger, :observer, :wx, :runtime_tools],
-      mod: {Golex.Application, []}
+      mod: {Distro.Application, []}
     ]
   end
 

@@ -1,4 +1,4 @@
-defmodule Golex.Application do
+defmodule Distro.Application do
   use Application
 
   @impl true
@@ -10,13 +10,13 @@ defmodule Golex.Application do
     ]
 
     children = [
-      {Cluster.Supervisor, [topologies, [name: Golex.ClusterSupervisor]]},
-      {Horde.Registry, [members: :auto, keys: :unique, name: Golex.CounterRegistry]},
-      Golex.HordeSupervisor,
-      Golex.NodeObserver
+      {Cluster.Supervisor, [topologies, [name: Distro.ClusterSupervisor]]},
+      {Horde.Registry, [members: :auto, keys: :unique, name: Distro.CounterRegistry]},
+      Distro.HordeSupervisor,
+      Distro.NodeObserver
     ]
 
-    opts = [strategy: :one_for_one, name: Golex.Supervisor]
+    opts = [strategy: :one_for_one, name: Distro.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

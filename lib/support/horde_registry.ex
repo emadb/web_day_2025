@@ -1,4 +1,4 @@
-# defmodule Golex.HordeRegistry do
+# defmodule Distro.HordeRegistry do
 #   use Horde.Registry
 
 #   def start_link(_) do

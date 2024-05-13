@@ -17,11 +17,11 @@ There are also a couple of function like `count` and `get_list` that are useful 
 #### List all cells
 
 ```elixir
-:ets.tab2list(:"keys_Elixir.Golex.CellRegistry")
+:ets.tab2list(:"keys_Elixir.Distro.CellRegistry")
 ```
 
 #### Specify which node to use
 
 ```elixir
-Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one, distribution_strategy: Golex.LocalNodeDistribution], name: __MODULE__)
+Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one, distribution_strategy: Distro.LocalNodeDistribution], name: __MODULE__)
 ```

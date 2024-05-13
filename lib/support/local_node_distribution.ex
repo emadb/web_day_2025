@@ -1,4 +1,4 @@
-defmodule Golex.LocalNodeDistribution do
+defmodule Distro.LocalNodeDistribution do
   @behaviour Horde.DistributionStrategy
 
   @moduledoc """
@@ -9,7 +9,7 @@ defmodule Golex.LocalNodeDistribution do
     {:ok,
      %Horde.DynamicSupervisor.Member{
        status: :alive,
-       name: {Golex.HordeSupervisor, Node.self()}
+       name: {Distro.HordeSupervisor, Node.self()}
      }}
   end
 
