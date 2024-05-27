@@ -11,15 +11,11 @@ defmodule Distro.HordeSupervisor do
     |> Horde.DynamicSupervisor.init()
   end
 
-  def start_child(child_spec) do
-    Horde.DynamicSupervisor.start_child(__MODULE__, child_spec)
-  end
-
   def members() do
     Enum.map([Node.self() | Node.list()], &{__MODULE__, &1})
   end
 
   def start_counter(id) do
-    start_child({Distro.GlobalCounter, [id]})
+    Horde.DynamicSupervisor.start_child(__MODULE__, {Distro.GlobalCounter, [id]})
   end
 end
