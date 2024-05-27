@@ -158,7 +158,7 @@ defmodule GolexTest do
 
       Distro.God.give_life()
 
-      assert [{_, nil}] = Horde.Registry.lookup(Distro.CellRegistry, {11, 11})
+      assert [{_, nil}] = Horde.Registry.lookup(Distro.CounterRegistry, {11, 11})
     end
   end
 end

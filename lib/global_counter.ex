@@ -1,22 +1,22 @@
-defmodule Distro.Counter do
+defmodule Distro.GlobalCounter do
   use GenServer, restart: :transient
 
   def start_link([id]) do
-    GenServer.start_link(__MODULE__, [id], name: via_tuple(id))
+    GenServer.start_link(__MODULE__, [id], name: {:global, id})
   end
 
   def init([id]) do
     Process.flag(:trap_exit, true)
-    IO.inspect({node(), id}, label: "INIT")
+    IO.inspect({node(), id}, label: "GLOBAL INIT")
     {:ok, %{id: id, count: 0}}
   end
 
   def get(id) do
-    GenServer.call(via_tuple(id), :get)
+    GenServer.call(id, :get)
   end
 
   def count(id) do
-    GenServer.call(via_tuple(id), :count)
+    GenServer.call(id, :count)
   end
 
   def handle_call(:get, _from, state) do
@@ -35,9 +35,5 @@ defmodule Distro.Counter do
 
   def terminate(reason, state) do
     IO.inspect({reason, state}, label: "terminate")
-  end
-
-  defp via_tuple(coord) do
-    {:via, Horde.Registry, {Distro.CounterRegistry, coord}}
   end
 end

@@ -17,7 +17,7 @@ There are also a couple of function like `count` and `get_list` that are useful 
 #### List all cells
 
 ```elixir
-:ets.tab2list(:"keys_Elixir.Distro.CellRegistry")
+:ets.tab2list(:"keys_Elixir.Distro.CounterRegistry")
 ```
 
 #### Specify which node to use

@@ -2,7 +2,6 @@ defmodule Distro.NodeObserver do
   use GenServer
 
   require Logger
-  alias Distro.HordeSupervisor
 
   def start_link(_), do: GenServer.start_link(__MODULE__, [])
 
@@ -13,17 +12,15 @@ defmodule Distro.NodeObserver do
   end
 
   def handle_info({:nodeup, node, _node_type}, state) do
-    # set_members(HordeRegistry)
-    set_members(Distro.CellRegistry)
-    set_members(HordeSupervisor)
+    # set_members(Distro.CounterRegistry)
+    set_members(Distro.MySupervisor)
     Logger.info("NEW NODE #{inspect(node)}")
     {:noreply, state}
   end
 
   def handle_info({:nodedown, _node, _node_type}, state) do
-    # set_members(HordeRegistry)
-    set_members(Distro.CellRegistry)
-    set_members(HordeSupervisor)
+    # set_members(Distro.CounterRegistry)
+    set_members(Distro.MySupervisor)
     {:noreply, state}
   end
 
