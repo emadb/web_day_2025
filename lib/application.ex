@@ -17,6 +17,18 @@ defmodule Distro.Application do
     ]
 
     opts = [strategy: :one_for_one, name: Distro.Supervisor]
-    Supervisor.start_link(children, opts)
+
+    if String.contains?(Atom.to_string(node()), "node_1") do
+      Supervisor.start_link(
+        [
+          {Plug.Cowboy, scheme: :http, plug: Distro.Router, options: [port: 4000]} | children
+        ],
+        opts
+      )
+    else
+      Supervisor.start_link(children, opts)
+    end
+
+    #
   end
 end

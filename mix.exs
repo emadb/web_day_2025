@@ -23,7 +23,11 @@ defmodule Distro.MixProject do
   defp deps do
     [
       {:libcluster, "~> 3.3.3"},
-      {:horde, "~> 0.8.3"}
+      {:horde, "~> 0.8.3"},
+      {:plug, "~> 1.15"},
+      {:cowboy, "~> 2.10"},
+      {:jason, "~> 1.4"},
+      {:plug_cowboy, "~> 2.6"}
     ]
   end
 end

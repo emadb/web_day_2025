@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <title>Elixir</title>
+  </head>
+  <body>
+    <h1>Distributed Elixir</h1>
+
+    <div>
+      <h3>Start new counter</h3>
+      Id: <input type="text" id="start_process_id" />
+      <button onclick="startCounter()">Start</button>
+    </div>
+
+    <div>
+      <h3>Count</h3>
+      Id: <input type="text" id="count_process_id" />
+      <button onclick="count()">Count</button>
+    </div>
+
+    <div>
+      <h3>Info</h3>
+      <button onClick="getNodes()">Get Nodes</button>
+
+      <ul id="nodes"></ul>
+
+      <ul id="processes"></ul>
+    </div>
+  </body>
+
+  <script>
+    function count() {
+      const id = parseInt(document.getElementById("count_process_id").value);
+      fetch(`/api/count`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify({ process_id: id }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
+    }
+
+    function startCounter() {
+      const id = parseInt(document.getElementById("start_process_id").value);
+      fetch(`/api/counter`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify({ process_id: id }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
+    }
+
+    function getNodes() {
+      fetch(`/api/nodes`, {})
+        .then((response) => response.json())
+        .then((data) => {
+          const ul = document.getElementById("nodes");
+          ul.innerHTML = "";
+          data.map((d) => {
+            const li = document.createElement("li");
+            li.appendChild(document.createTextNode(d));
+
+            li.appendChild(getButton(d));
+            ul.appendChild(li);
+          });
+        });
+    }
+
+    function getButton(node) {
+      const b = document.createElement("button");
+      b.textContent = "Show Processes";
+      b.addEventListener("click", () => getProcesses(node));
+      return b;
+    }
+
+    function getProcesses(node) {
+      fetch(`/api/nodes/${node}`, {})
+        .then((response) => response.json())
+        .then((data) => {
+          const ul = document.getElementById("processes");
+          ul.innerHTML = "";
+          data.map((d) => {
+            const li = document.createElement("li");
+            li.appendChild(document.createTextNode(d.id + ":" + d.count));
+            ul.appendChild(li);
+          });
+        });
+    }
+  </script>
+</html>

@@ -19,7 +19,7 @@ defmodule Distro.HordeSupervisor do
     Enum.map([Node.self() | Node.list()], &{__MODULE__, &1})
   end
 
-  def start_cell(id) do
+  def start_counter(id) do
     start_child({Distro.GlobalCounter, [id]})
   end
 end
