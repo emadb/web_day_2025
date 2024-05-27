@@ -13,14 +13,14 @@ defmodule Distro.NodeObserver do
 
   def handle_info({:nodeup, node, _node_type}, state) do
     # set_members(Distro.CounterRegistry)
-    set_members(Distro.MySupervisor)
+    set_members(Distro.HordeSupervisor)
     Logger.info("NEW NODE #{inspect(node)}")
     {:noreply, state}
   end
 
   def handle_info({:nodedown, _node, _node_type}, state) do
     # set_members(Distro.CounterRegistry)
-    set_members(Distro.MySupervisor)
+    set_members(Distro.HordeSupervisor)
     {:noreply, state}
   end
 

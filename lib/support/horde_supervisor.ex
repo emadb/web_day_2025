@@ -3,8 +3,6 @@ defmodule Distro.HordeSupervisor do
 
   def start_link(_) do
     Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one], name: __MODULE__)
-
-    # Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one, distribution_strategy: Distro.LocalNodeDistribution], name: __MODULE__)
   end
 
   def init(init_arg) do
@@ -22,6 +20,6 @@ defmodule Distro.HordeSupervisor do
   end
 
   def start_cell(id) do
-    start_child({Distro.Counter, [id]})
+    start_child({Distro.GlobalCounter, [id]})
   end
 end

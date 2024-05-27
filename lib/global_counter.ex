@@ -23,11 +23,6 @@ defmodule Distro.GlobalCounter do
     {:reply, state, state}
   end
 
-  def handle_call({:set, value}, _from, state) do
-    new_state = %{state | count: value}
-    {:reply, new_state, new_state}
-  end
-
   def handle_call(:count, _from, state) do
     new_state = %{state | count: state.count + 1}
     {:reply, new_state, new_state}

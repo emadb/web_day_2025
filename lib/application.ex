@@ -13,7 +13,6 @@ defmodule Distro.Application do
       {Cluster.Supervisor, [topologies, [name: Distro.ClusterSupervisor]]},
       # {Horde.Registry, [members: :auto, keys: :unique, name: Distro.CounterRegistry]},
       Distro.HordeSupervisor,
-      {Distro.MySupervisor, []},
       Distro.NodeObserver
     ]
 
