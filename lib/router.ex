@@ -35,11 +35,11 @@ defmodule Distro.Router do
     counters =
       Horde.DynamicSupervisor.which_children(Distro.HordeSupervisor)
       |> Enum.map(fn {_, pid, _, _} -> pid end)
-      |> Enum.map(fn pid -> Distro.GlobalCounter.get_id(pid) end)
-      |> Enum.map(fn id -> {id, Distro.GlobalCounter.node(id)} end)
+      |> Enum.map(fn pid -> Distro.Counter.get_id(pid) end)
+      |> Enum.map(fn id -> {id, Distro.Counter.node(id)} end)
       |> Enum.reduce([], fn {id, node}, acc ->
         case Atom.to_string(node) do
-          ^name -> [Distro.GlobalCounter.get(id) | acc]
+          ^name -> [Distro.Counter.get(id) | acc]
           _ -> acc
         end
       end)
@@ -51,7 +51,7 @@ defmodule Distro.Router do
 
   post "/api/counter" do
     id = Map.get(conn.body_params, "process_id")
-    {:ok, pid} = Distro.HordeSupervisor.start_counter(id)
+    {:ok, _} = Distro.HordeSupervisor.start_counter(id)
 
     conn
     |> put_resp_content_type("application/json")
@@ -60,7 +60,7 @@ defmodule Distro.Router do
 
   post "/api/count" do
     id = Map.get(conn.body_params, "process_id")
-    state = Distro.GlobalCounter.count(id)
+    state = Distro.Counter.count(id)
 
     conn
     |> put_resp_content_type("application/json")

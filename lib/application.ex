@@ -11,7 +11,7 @@ defmodule Distro.Application do
 
     children = [
       {Cluster.Supervisor, [topologies, [name: Distro.ClusterSupervisor]]},
-      # {Horde.Registry, [members: :auto, keys: :unique, name: Distro.CounterRegistry]},
+      {Horde.Registry, [members: :auto, keys: :unique, name: Distro.CounterRegistry]},
       Distro.HordeSupervisor,
       Distro.NodeObserver
     ]

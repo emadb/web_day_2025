@@ -15,17 +15,24 @@ defmodule Distro.Counter do
     GenServer.call(via_tuple(id), :get)
   end
 
+  def get_id(pid) do
+    GenServer.call(pid, :get_id)
+  end
+
   def count(id) do
     GenServer.call(via_tuple(id), :count)
+  end
+
+  def node(id) do
+    GenServer.call(via_tuple(id), :node)
   end
 
   def handle_call(:get, _from, state) do
     {:reply, state, state}
   end
 
-  def handle_call({:set, value}, _from, state) do
-    new_state = %{state | count: value}
-    {:reply, new_state, new_state}
+  def handle_call(:get_id, _from, state) do
+    {:reply, state.id, state}
   end
 
   def handle_call(:count, _from, state) do
@@ -33,11 +40,15 @@ defmodule Distro.Counter do
     {:reply, new_state, new_state}
   end
 
+  def handle_call(:node, _from, state) do
+    {:reply, node(), state}
+  end
+
   def terminate(reason, state) do
     IO.inspect({reason, state}, label: "terminate")
   end
 
-  defp via_tuple(coord) do
-    {:via, Horde.Registry, {Distro.CounterRegistry, coord}}
+  defp via_tuple(id) do
+    {:via, Horde.Registry, {Distro.CounterRegistry, id, node()}}
   end
 end

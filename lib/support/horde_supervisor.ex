@@ -16,6 +16,6 @@ defmodule Distro.HordeSupervisor do
   end
 
   def start_counter(id) do
-    Horde.DynamicSupervisor.start_child(__MODULE__, {Distro.GlobalCounter, [id]})
+    Horde.DynamicSupervisor.start_child(__MODULE__, {Distro.Counter, [id]})
   end
 end
