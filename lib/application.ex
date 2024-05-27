@@ -4,7 +4,7 @@ defmodule Distro.Application do
   @impl true
   def start(_type, _args) do
     topologies = [
-      golex: [
+      distro: [
         strategy: Cluster.Strategy.Gossip
       ]
     ]

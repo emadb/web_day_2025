@@ -26,6 +26,7 @@
 
       <ul id="nodes"></ul>
 
+      <h4 id="processes_node"></h4>
       <ul id="processes"></ul>
     </div>
   </body>
@@ -90,6 +91,9 @@
       fetch(`/api/nodes/${node}`, {})
         .then((response) => response.json())
         .then((data) => {
+          const title = document.getElementById("processes_node");
+          title.innerText = node;
+
           const ul = document.getElementById("processes");
           ul.innerHTML = "";
           data.map((d) => {
