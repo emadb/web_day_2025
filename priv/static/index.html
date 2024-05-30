@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <title>Elixir</title>
+    <style>
+      body {
+        font-size: large;
+      }
+    </style>
   </head>
   <body>
     <h1>Distributed Elixir</h1>
@@ -60,6 +65,7 @@
       })
         .then((response) => response.json())
         .then((data) => {
+          document.getElementById("start_process_id").value = ""
           console.log(data);
         });
     }
@@ -92,7 +98,7 @@
         .then((response) => response.json())
         .then((data) => {
           const title = document.getElementById("processes_node");
-          title.innerText = node;
+          title.innerText = `${node} (${data.length})`;
 
           const ul = document.getElementById("processes");
           ul.innerHTML = "";

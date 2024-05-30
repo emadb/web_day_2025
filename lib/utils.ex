@@ -1,12 +1,13 @@
 defmodule U do
+  def list_nodes do
+    Distro.HordeSupervisor.members()
+    |> Enum.map(fn {_, n} -> n end)
+  end
+
   def list_servers do
     Horde.Registry.select(Distro.CounterRegistry, [
       {{:"$1", :"$2", :"$3"}, [], [{{:"$1", :"$2", :"$3"}}]}
     ])
-  end
-
-  def list_nodes do
-    Distro.HordeSupervisor.members()
   end
 
   def start_counters(n) do

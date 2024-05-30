@@ -1,5 +1,6 @@
 defmodule Distro.Counter do
   use GenServer, restart: :transient
+  require Logger
 
   def start_link([id]) do
     GenServer.start_link(__MODULE__, [id], name: via_tuple(id))
@@ -7,7 +8,7 @@ defmodule Distro.Counter do
 
   def init([id]) do
     Process.flag(:trap_exit, true)
-    IO.inspect({node(), id}, label: "INIT")
+    Logger.info("Starting counter: #{inspect(id)} on  #{inspect(node())}")
     {:ok, %{id: id, count: 0}}
   end
 
@@ -36,6 +37,7 @@ defmodule Distro.Counter do
   end
 
   def handle_call(:count, _from, state) do
+    Logger.info("Counting: #{inspect(state.id)} on  #{inspect(node())}")
     new_state = %{state | count: state.count + 1}
     {:reply, new_state, new_state}
   end
@@ -44,8 +46,12 @@ defmodule Distro.Counter do
     {:reply, node(), state}
   end
 
-  def terminate(reason, state) do
-    IO.inspect({reason, state}, label: "terminate")
+  def handle_info({:EXIT, _, _reason}, state) do
+    {:noreply, state}
+  end
+
+  def terminate(_reason, state) do
+    Logger.info("Terminate: #{inspect(state.id)} on  #{inspect(node())}")
   end
 
   defp via_tuple(id) do
