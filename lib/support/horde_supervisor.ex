@@ -2,11 +2,11 @@ defmodule Distro.HordeSupervisor do
   use Horde.DynamicSupervisor
 
   def start_link(_) do
-    IO.inspect "START SUPPP"
-    Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one], [
+    Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one],
       name: __MODULE__,
       distribution_strategy: Horde.UniformRandomDistribution,
-      process_redistribution: :active])
+      process_redistribution: :active
+    )
   end
 
   def init(init_arg) do
