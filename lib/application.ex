@@ -28,7 +28,5 @@ defmodule Distro.Application do
     else
       Supervisor.start_link(children, opts)
     end
-
-    #
   end
 end
