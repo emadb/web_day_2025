@@ -7,7 +7,7 @@ defmodule Distro.Counter do
   end
 
   def init([id]) do
-    Logger.info("Starting counter: #{inspect(id)} on  #{inspect(node())}")
+    Logger.info("#{inspect(node())}: Starting counter #{inspect(id)}")
     {:ok, %{id: id, count: 0}}
   end
 
@@ -36,7 +36,7 @@ defmodule Distro.Counter do
   end
 
   def handle_call(:count, _from, state) do
-    Logger.info("Counting: #{inspect(state.id)} on  #{inspect(node())}")
+    Logger.info("#{inspect(node())}: counting: #{inspect(state.id)}")
     new_state = %{state | count: state.count + 1}
     {:reply, new_state, new_state}
   end
