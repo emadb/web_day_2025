@@ -67,6 +67,15 @@ defmodule Distro.Router do
     |> send_resp(200, Jason.encode!(state))
   end
 
+  post "/api/crash" do
+    id = Map.get(conn.body_params, "process_id")
+    Distro.Counter.crash(id)
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(500, Jason.encode!(%{message: "crashed"}))
+  end
+
   get "/" do
     content = File.read!("priv/static/index.html")
 

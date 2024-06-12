@@ -27,6 +27,10 @@ defmodule Distro.Counter do
     GenServer.call(via_tuple(id), :node)
   end
 
+  def crash(id) do
+    GenServer.call(via_tuple(id), :crash)
+  end
+
   def handle_call(:get, _from, state) do
     {:reply, state, state}
   end
@@ -43,6 +47,11 @@ defmodule Distro.Counter do
 
   def handle_call(:node, _from, state) do
     {:reply, node(), state}
+  end
+
+  def handle_call(:crash, _from, state) do
+    1 / 0
+    {:reply, state, state}
   end
 
   defp via_tuple(id) do

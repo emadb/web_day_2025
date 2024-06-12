@@ -26,6 +26,17 @@
     </div>
 
     <div>
+      <h3>Crash</h3>
+      Id: <input type="text" id="crash_process_id" />
+      <button onclick="crash()">Crash!</button>
+    </div>
+
+    <div>
+      <h3>Log</h3>
+      <pre id="log" style="background-color: #eeeeee; padding: 20px"></pre>
+    </div>
+
+    <div>
       <h3>Info</h3>
       <button onClick="getNodes()">Get Nodes</button>
 
@@ -37,6 +48,16 @@
   </body>
 
   <script>
+    function log(data) {
+      const log = document.getElementById("log");
+      let text = "";
+      try {
+        text = JSON.stringify(data);
+      } catch {
+        text = data;
+      }
+      log.innerHTML = text;
+    }
     function count() {
       const id = parseInt(document.getElementById("count_process_id").value);
       fetch(`/api/count`, {
@@ -49,6 +70,24 @@
       })
         .then((response) => response.json())
         .then((data) => {
+          log(data);
+          console.log(data);
+        });
+    }
+
+    function crash() {
+      const id = parseInt(document.getElementById("crash_process_id").value);
+      fetch(`/api/crash`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        body: JSON.stringify({ process_id: id }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          log(data);
           console.log(data);
         });
     }
@@ -65,7 +104,8 @@
       })
         .then((response) => response.json())
         .then((data) => {
-          document.getElementById("start_process_id").value = ""
+          document.getElementById("start_process_id").value = "";
+          log(data);
           console.log(data);
         });
     }
@@ -76,6 +116,7 @@
         .then((data) => {
           const ul = document.getElementById("nodes");
           ul.innerHTML = "";
+          log(data);
           data.map((d) => {
             const li = document.createElement("li");
             li.appendChild(document.createTextNode(d));
@@ -102,9 +143,12 @@
 
           const ul = document.getElementById("processes");
           ul.innerHTML = "";
+          log(data);
           data.map((d) => {
             const li = document.createElement("li");
-            li.appendChild(document.createTextNode(d.id + ":" + d.count));
+            li.appendChild(
+              document.createTextNode(`${d.id} | count: ${d.count}`),
+            );
             ul.appendChild(li);
           });
         });
