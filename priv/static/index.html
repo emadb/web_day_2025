@@ -6,36 +6,34 @@
     <title>Elixir</title>
     <style>
       body {
+        padding-left: 50px;
+        padding-right: 50px;
         font-size: large;
+        font-family: sans-serif;
       }
     </style>
   </head>
   <body>
-    <h1>Distributed Elixir</h1>
+    <h1 style="color: #742e9c">Distributed Elixir</h1>
+    <fieldset>
+      <div>
+        <h3>Start new counter</h3>
+        Id: <input type="text" id="start_process_id" />
+        <button onclick="startCounter()">Start</button>
+      </div>
 
-    <div>
-      <h3>Start new counter</h3>
-      Id: <input type="text" id="start_process_id" />
-      <button onclick="startCounter()">Start</button>
-    </div>
+      <div>
+        <h3>Count</h3>
+        Id: <input type="text" id="count_process_id" />
+        <button onclick="count()">Count</button>
+      </div>
 
-    <div>
-      <h3>Count</h3>
-      Id: <input type="text" id="count_process_id" />
-      <button onclick="count()">Count</button>
-    </div>
-
-    <div>
-      <h3>Crash</h3>
-      Id: <input type="text" id="crash_process_id" />
-      <button onclick="crash()">Crash!</button>
-    </div>
-
-    <div>
-      <h3>Log</h3>
-      <pre id="log" style="background-color: #eeeeee; padding: 20px"></pre>
-    </div>
-
+      <div>
+        <h3>Crash</h3>
+        Id: <input type="text" id="crash_process_id" />
+        <button onclick="crash()">Crash!</button>
+      </div>
+    </fieldset>
     <div>
       <h3>Info</h3>
       <button onClick="getNodes()">Get Nodes</button>
@@ -44,6 +42,10 @@
 
       <h4 id="processes_node"></h4>
       <ul id="processes"></ul>
+    </div>
+    <div>
+      <h3>Log</h3>
+      <pre id="log" style="background-color: #eeeeee; padding: 20px"></pre>
     </div>
   </body>
 

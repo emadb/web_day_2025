@@ -37,4 +37,20 @@ defmodule U do
     |> Enum.at(0)
     |> elem(2)
   end
+
+  defp send_random() do
+    list_servers()
+    |> Enum.shuffle()
+    |> Enum.take(3)
+    |> Enum.map(fn {id, _, _} -> Distro.Counter.count(id) end)
+
+    Process.sleep(1000)
+    send_random()
+  end
+
+  def start_task do
+    Task.start(fn ->
+      send_random()
+    end)
+  end
 end
