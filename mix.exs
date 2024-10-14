@@ -22,8 +22,8 @@ defmodule Distro.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:libcluster, "~> 3.3.3"},
-      {:horde, "~> 0.8.3"},
+      {:libcluster, "~> 3.4.1"},
+      {:horde, "~> 0.9.0"},
       {:plug, "~> 1.15"},
       {:cowboy, "~> 2.10"},
       {:jason, "~> 1.4"},
