@@ -27,7 +27,8 @@ defmodule Distro.MixProject do
       {:plug, "~> 1.15"},
       {:cowboy, "~> 2.10"},
       {:jason, "~> 1.4"},
-      {:plug_cowboy, "~> 2.6"}
+      {:plug_cowboy, "~> 2.6"},
+      {:phoenix_pubsub, "~> 2.1"}
     ]
   end
 end

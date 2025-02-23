@@ -1,5 +1,6 @@
 defmodule Distro.Rover do
   use GenServer
+  alias Phoenix.PubSub
 
   def start_link([id, {x, y}, dir]) when dir in [:north, :south, :east, :west] do
     GenServer.start_link(__MODULE__, [id, {x, y}, dir], name: via_tuple(id))
@@ -46,7 +47,13 @@ defmodule Distro.Rover do
       |> Enum.random()
       |> then(fn c -> move([c], state) end)
 
-    {:noreply, new_state}
+    crash? = Enum.random(1..10) == 1
+
+    if crash? do
+      {:stop, :crashed, new_state}
+    else
+      {:noreply, new_state}
+    end
   end
 
   def handle_call(:get_state, _from, state) do
@@ -67,13 +74,9 @@ defmodule Distro.Rover do
     {:reply, :ok, new_state}
   end
 
-  def handle_call(:node, _from, state) do
-    {:reply, node(), state}
-  end
-
-  def handle_call(:crash, _from, state) do
-    1 / 0
-    {:reply, state, state}
+  def terminate(_reason, state) do
+    IO.inspect(state, label: "CRASHED")
+    Phoenix.PubSub.broadcast(:rover_broker, "crash", state)
   end
 
   defp move(cmd, state) do
