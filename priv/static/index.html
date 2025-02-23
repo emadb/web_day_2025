@@ -17,21 +17,9 @@
     <h1 style="color: #742e9c">Distributed Elixir</h1>
     <fieldset>
       <div>
-        <h3>Start new counter</h3>
+        <h3>Start new rover</h3>
         Id: <input type="text" id="start_process_id" />
-        <button onclick="startCounter()">Start</button>
-      </div>
-
-      <div>
-        <h3>Count</h3>
-        Id: <input type="text" id="count_process_id" />
-        <button onclick="count()">Count</button>
-      </div>
-
-      <div>
-        <h3>Crash</h3>
-        Id: <input type="text" id="crash_process_id" />
-        <button onclick="crash()">Crash!</button>
+        <button onclick="startRover()">Start</button>
       </div>
     </fieldset>
     <div>
@@ -45,7 +33,18 @@
     </div>
     <div>
       <h3>Log</h3>
-      <pre id="log" style="background-color: #eeeeee; padding: 20px"></pre>
+      <pre
+        id="log"
+        style="
+          background-color: #eeeeee;
+          width: 100%;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          border: 1px solid #ccc;
+          padding: 10px;
+        "
+      ></pre>
     </div>
   </body>
 
@@ -60,43 +59,10 @@
       }
       log.innerHTML = text;
     }
-    function count() {
-      const id = parseInt(document.getElementById("count_process_id").value);
-      fetch(`/api/count`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-        body: JSON.stringify({ process_id: id }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          log(data);
-          console.log(data);
-        });
-    }
 
-    function crash() {
-      const id = parseInt(document.getElementById("crash_process_id").value);
-      fetch(`/api/crash`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-        body: JSON.stringify({ process_id: id }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          log(data);
-          console.log(data);
-        });
-    }
-
-    function startCounter() {
+    function startRover() {
       const id = parseInt(document.getElementById("start_process_id").value);
-      fetch(`/api/counter`, {
+      fetch(`/api/rover`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -149,7 +115,9 @@
           data.map((d) => {
             const li = document.createElement("li");
             li.appendChild(
-              document.createTextNode(`${d.id} | count: ${d.count}`),
+              document.createTextNode(
+                `${d.id} | pos: [${d.pos}] count: ${d.move_count}`,
+              ),
             );
             ul.appendChild(li);
           });

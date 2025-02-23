@@ -17,6 +17,14 @@ defmodule Distro.Rover do
     GenServer.call(via_tuple(id), :get_state)
   end
 
+  def get_id(pid) do
+    GenServer.call(pid, :get_id)
+  end
+
+  def node(id) do
+    GenServer.call(via_tuple(id), :node)
+  end
+
   def send(id, cmd) when is_list(cmd) do
     GenServer.call(via_tuple(id), {:send, cmd})
   end
@@ -43,6 +51,14 @@ defmodule Distro.Rover do
 
   def handle_call(:get_state, _from, state) do
     {:reply, state, state}
+  end
+
+  def handle_call(:get_id, _from, state) do
+    {:reply, state.id, state}
+  end
+
+  def handle_call(:node, _from, state) do
+    {:reply, node(), state}
   end
 
   def handle_call({:send, cmd}, _from, state) do

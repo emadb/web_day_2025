@@ -39,7 +39,7 @@ defmodule Distro.Router do
       |> Enum.map(fn id -> {id, Distro.Rover.node(id)} end)
       |> Enum.reduce([], fn {id, node}, acc ->
         case Atom.to_string(node) do
-          ^name -> [Distro.Rover.get(id) | acc]
+          ^name -> [project_state(Distro.Rover.get_state(id)) | acc]
           _ -> acc
         end
       end)
@@ -49,32 +49,32 @@ defmodule Distro.Router do
     |> send_resp(200, Jason.encode!(counters))
   end
 
-  post "/api/counter" do
+  post "/api/rover" do
     id = Map.get(conn.body_params, "process_id")
-    {:ok, _} = Distro.HordeSupervisor.start_counter(id)
+    {:ok, _} = Distro.HordeSupervisor.start_rover(id, random_coords())
 
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(200, Jason.encode!(%{message: "OK"}))
   end
 
-  post "/api/count" do
-    id = Map.get(conn.body_params, "process_id")
-    state = Distro.Rover.count(id)
+  post "/api/rover/:id/command" do
+    cmd = Map.get(conn.body_params, "cmd")
+    state = Distro.Rover.send(String.to_integer(id), cmd)
 
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(200, Jason.encode!(state))
   end
 
-  post "/api/crash" do
-    id = Map.get(conn.body_params, "process_id")
-    Distro.Rover.crash(id)
+  # post "/api/crash" do
+  #   id = Map.get(conn.body_params, "process_id")
+  #   Distro.Rover.crash(id)
 
-    conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(500, Jason.encode!(%{message: "crashed"}))
-  end
+  #   conn
+  #   |> put_resp_content_type("application/json")
+  #   |> send_resp(500, Jason.encode!(%{message: "crashed"}))
+  # end
 
   get "/" do
     content = File.read!("priv/static/index.html")
@@ -83,4 +83,12 @@ defmodule Distro.Router do
     |> put_resp_header("content-type", "text/html")
     |> send_resp(200, content)
   end
+
+  defp project_state(rover) do
+    IO.inspect(rover, label: ">>")
+
+    %{rover | pos: [elem(rover.pos, 0), elem(rover.pos, 1)]}
+  end
+
+  defp random_coords(), do: {Enum.random(1..100), Enum.random(1..100)}
 end
