@@ -4,7 +4,7 @@ defmodule Distro.HordeSupervisor do
   def start_link(_) do
     Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one],
       name: __MODULE__,
-      distribution_strategy: Horde.UniformRandomDistribution,
+      distribution_strategy: Horde.UniformQuorumDistribution,
       process_redistribution: :active
     )
   end
@@ -19,7 +19,7 @@ defmodule Distro.HordeSupervisor do
     Enum.map([Node.self() | Node.list()], &{__MODULE__, &1})
   end
 
-  def start_counter(id) do
-    Horde.DynamicSupervisor.start_child(__MODULE__, {Distro.Counter, [id]})
+  def start_rover(id, {x, y}) do
+    Horde.DynamicSupervisor.start_child(__MODULE__, {Distro.Rover, [id, {x, y}]})
   end
 end

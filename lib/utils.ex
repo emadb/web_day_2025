@@ -5,25 +5,27 @@ defmodule U do
   end
 
   def list_servers do
-    Horde.Registry.select(Distro.CounterRegistry, [
+    Horde.Registry.select(Distro.RoverRegistry, [
       {{:"$1", :"$2", :"$3"}, [], [{{:"$1", :"$2", :"$3"}}]}
     ])
   end
 
-  def start_counters(n) do
-    Enum.map(1..n, fn x -> Distro.HordeSupervisor.start_counter(x) end)
+  def start_rovers(n) do
+    Enum.map(1..n, fn id ->
+      Distro.HordeSupervisor.start_rover(id, {Enum.random(1..100), Enum.random(1..100)})
+    end)
   end
 
-  def count(id) do
-    Distro.Counter.count(id)
+  def send(id, cmd) do
+    Distro.Rover.send(id, cmd)
   end
 
   def get_state(id) do
-    Distro.Counter.get(id)
+    Distro.Rover.get_state(id)
   end
 
   def get_pid(id) do
-    Horde.Registry.select(Distro.CounterRegistry, [
+    Horde.Registry.select(Distro.RoverRegistry, [
       {{:"$1", :"$2", :"$3"}, [{:==, :"$1", id}], [{{:"$1", :"$2", :"$3"}}]}
     ])
     |> Enum.at(0)
@@ -31,26 +33,10 @@ defmodule U do
   end
 
   def get_node(id) do
-    Horde.Registry.select(Distro.CounterRegistry, [
+    Horde.Registry.select(Distro.RoverRegistry, [
       {{:"$1", :"$2", :"$3"}, [{:==, :"$1", id}], [{{:"$1", :"$2", :"$3"}}]}
     ])
     |> Enum.at(0)
     |> elem(2)
-  end
-
-  defp send_random() do
-    list_servers()
-    |> Enum.shuffle()
-    |> Enum.take(3)
-    |> Enum.map(fn {id, _, _} -> Distro.Counter.count(id) end)
-
-    Process.sleep(1000)
-    send_random()
-  end
-
-  def start_task do
-    Task.start(fn ->
-      send_random()
-    end)
   end
 end
