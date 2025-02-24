@@ -40,13 +40,10 @@ defmodule Distro.Router do
   get "/api/nodes/:name" do
     counters =
       ProcessHub.which_children(:rover_hub, [:global])
-      |> Enum.map(fn {node, workers} ->
+      |> Enum.flat_map(fn {node, workers} ->
         if to_string(node) == name, do: workers, else: []
       end)
-      |> Enum.reject(fn n -> n == [] end)
-      |> Enum.flat_map(fn x -> x end)
-      |> Enum.map(fn {_, pid, _, _} -> pid end)
-      |> Enum.map(fn pid -> Distro.Rover.get_id(pid) end)
+      |> Enum.map(&elem(&1, 0))
       |> Enum.map(fn id -> project_state(Distro.Rover.get_state(id)) end)
 
     conn

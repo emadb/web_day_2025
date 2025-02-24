@@ -47,18 +47,14 @@ defmodule Distro.Rover do
       |> Enum.random()
       |> then(fn c -> move([c], state) end)
 
-    crash? = Enum.random(1..10) == 1
+    # crash? = Enum.random(1..10) == 1
+    crash? = false
 
     if crash? do
       {:stop, :crash, new_state}
     else
       {:noreply, new_state}
     end
-  end
-
-  def handle_info({:EXIT, _from, :shutdown}, state) do
-    IO.inspect("HANDLE INFO")
-    {:stop, :normal, state}
   end
 
   def handle_call(:get_state, _from, state) do
@@ -73,6 +69,10 @@ defmodule Distro.Rover do
     {:reply, node(), state}
   end
 
+  def handle_call(:get_pid, _from, state) do
+    {:reply, self(), state}
+  end
+
   def handle_call({:send, cmd}, _from, state) do
     new_state = move(cmd, state)
 
@@ -80,7 +80,6 @@ defmodule Distro.Rover do
   end
 
   def terminate(_reason, state) do
-    IO.inspect(state, label: "CRASHED")
     Phoenix.PubSub.broadcast(:rover_broker, "crash", state)
   end
 
