@@ -29,7 +29,7 @@ defmodule Distro.Router do
 
   get "/api/nodes" do
     nodes =
-      Distro.RoverSupervisor.members()
+      Distro.RoverManager.members()
       |> Enum.map(fn {_, node} -> node end)
 
     conn
@@ -39,16 +39,15 @@ defmodule Distro.Router do
 
   get "/api/nodes/:name" do
     counters =
-      ProcessHub.which_children(Distro.RoverSupervisor)
+      ProcessHub.which_children(:rover_hub, [:global])
+      |> Enum.map(fn {node, workers} ->
+        if to_string(node) == name, do: workers, else: []
+      end)
+      |> Enum.reject(fn n -> n == [] end)
+      |> Enum.flat_map(fn x -> x end)
       |> Enum.map(fn {_, pid, _, _} -> pid end)
       |> Enum.map(fn pid -> Distro.Rover.get_id(pid) end)
-      |> Enum.map(fn id -> {id, Distro.Rover.node(id)} end)
-      |> Enum.reduce([], fn {id, node}, acc ->
-        case Atom.to_string(node) do
-          ^name -> [project_state(Distro.Rover.get_state(id)) | acc]
-          _ -> acc
-        end
-      end)
+      |> Enum.map(fn id -> project_state(Distro.Rover.get_state(id)) end)
 
     conn
     |> put_resp_content_type("application/json")
@@ -57,7 +56,7 @@ defmodule Distro.Router do
 
   post "/api/rover" do
     id = Map.get(conn.body_params, "process_id")
-    {:ok, _} = Distro.RoverSupervisor.start_rover(id, random_coords())
+    {:ok, _} = Distro.RoverManager.start_rover(id, random_coords())
 
     conn
     |> put_resp_content_type("application/json")

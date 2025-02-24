@@ -11,8 +11,7 @@ defmodule Distro.Application do
     children = [
       {Cluster.Supervisor, [topologies, [name: Distro.ClusterSupervisor]]},
       {Phoenix.PubSub, name: :rover_broker},
-      ProcessHub.child_spec(%ProcessHub{hub_id: :my_hub}),
-      Distro.NodeObserver
+      ProcessHub.child_spec(%ProcessHub{hub_id: :rover_hub})
     ]
 
     opts = [strategy: :one_for_one, name: Distro.Supervisor]

@@ -1,16 +1,16 @@
 defmodule U do
   def list_nodes do
-    Distro.RoverSupervisor.members()
+    Distro.RoverManager.members()
     |> Enum.map(fn {_, n} -> n end)
   end
 
   def list_rovers do
-    ProcessHub.which_children(:my_hub, [:global])
+    ProcessHub.which_children(:rover_hub, [:global])
   end
 
   def start_rovers(n) do
     Enum.map(1..n, fn id ->
-      Distro.RoverSupervisor.start_rover(id, {Enum.random(1..100), Enum.random(1..100)})
+      Distro.RoverManager.start_rover(id, {Enum.random(1..100), Enum.random(1..100)})
     end)
   end
 

@@ -1,14 +1,4 @@
-defmodule Distro.RoverSupervisor do
-  use DynamicSupervisor
-
-  def start_link(_) do
-    DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one], name: __MODULE__)
-  end
-
-  def init(init_arg) do
-    DynamicSupervisor.init(init_arg)
-  end
-
+defmodule Distro.RoverManager do
   def members() do
     Enum.map([Node.self() | Node.list()], &{__MODULE__, &1})
   end
@@ -19,6 +9,6 @@ defmodule Distro.RoverSupervisor do
       start: {Distro.Rover, :start_link, [[id, {x, y}]]}
     }
 
-    ProcessHub.start_child(:my_hub, child_spec)
+    ProcessHub.start_child(:rover_hub, child_spec)
   end
 end

@@ -125,6 +125,6 @@ defmodule Distro.Rover do
   defp rotate(cmd, dir) when cmd in ["F", "B"], do: dir
 
   defp via_tuple(id) do
-    {:via, :global, {id, node()}}
+    {:via, :global, id}
   end
 end
