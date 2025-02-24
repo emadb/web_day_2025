@@ -4,7 +4,7 @@ defmodule Distro.HordeSupervisor do
   def start_link(_) do
     Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one],
       name: __MODULE__,
-      distribution_strategy: Horde.UniformQuorumDistribution,
+      distribution_strategy: Horde.UniformDistribution,
       process_redistribution: :active
     )
   end

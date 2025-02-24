@@ -21,8 +21,7 @@ defmodule Distro.Application do
     if String.contains?(Atom.to_string(node()), "node_1") do
       Supervisor.start_link(
         [
-          {Plug.Cowboy,
-           scheme: :http, plug: Distro.Router, options: [port: 4000, dispatch: dispatch()]}
+          {Bandit, scheme: :http, plug: Distro.Router, port: 4000}
           | children
         ],
         opts
@@ -30,15 +29,5 @@ defmodule Distro.Application do
     else
       Supervisor.start_link(children, opts)
     end
-  end
-
-  defp dispatch do
-    [
-      {:_,
-       [
-         {"/ws", Distro.SocketHandler, []},
-         {:_, Plug.Cowboy.Handler, {Distro.Router, []}}
-       ]}
-    ]
   end
 end

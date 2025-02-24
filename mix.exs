@@ -24,11 +24,11 @@ defmodule Distro.MixProject do
     [
       {:libcluster, "~> 3.4.1"},
       {:horde, "~> 0.9.0"},
+      {:bandit, "~> 1.6"},
       {:plug, "~> 1.15"},
-      {:cowboy, "~> 2.10"},
       {:jason, "~> 1.4"},
-      {:plug_cowboy, "~> 2.6"},
-      {:phoenix_pubsub, "~> 2.1"}
+      {:phoenix_pubsub, "~> 2.1"},
+      {:websock_adapter, "~> 0.5.8"}
     ]
   end
 end

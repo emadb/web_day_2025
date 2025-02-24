@@ -49,11 +49,22 @@
   </body>
 
   <script>
+    const socket = new WebSocket("ws://localhost:4000/ws");
+    socket.onmessage = (evt) => {
+      const data = JSON.parse(evt.data);
+      log({ ...data, _m: "CRASHED" });
+    };
+
     function log(data) {
       const log = document.getElementById("log");
       let text = "";
       try {
-        text = JSON.stringify(data);
+        text =
+          new Date().toISOString() +
+          " >> " +
+          JSON.stringify(data) +
+          "\n" +
+          log.innerHTML;
       } catch {
         text = data;
       }

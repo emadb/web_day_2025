@@ -15,6 +15,12 @@ defmodule Distro.Router do
   plug(:match)
   plug(:dispatch)
 
+  get "/ws" do
+    conn
+    |> WebSockAdapter.upgrade(Distro.SocketHandler, [], timeout: 60_000)
+    |> halt()
+  end
+
   get "/api/ping" do
     conn
     |> put_resp_content_type("application/json")
@@ -67,15 +73,6 @@ defmodule Distro.Router do
     |> send_resp(200, Jason.encode!(state))
   end
 
-  # post "/api/crash" do
-  #   id = Map.get(conn.body_params, "process_id")
-  #   Distro.Rover.crash(id)
-
-  #   conn
-  #   |> put_resp_content_type("application/json")
-  #   |> send_resp(500, Jason.encode!(%{message: "crashed"}))
-  # end
-
   get "/" do
     content = File.read!("priv/static/index.html")
 
@@ -85,8 +82,6 @@ defmodule Distro.Router do
   end
 
   defp project_state(rover) do
-    IO.inspect(rover, label: ">>")
-
     %{rover | pos: [elem(rover.pos, 0), elem(rover.pos, 1)]}
   end
 

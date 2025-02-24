@@ -1,35 +1,21 @@
 defmodule Distro.SocketHandler do
   alias Phoenix.PubSub
-  @behaviour :cowboy_websocket_handler
+  @behaviour WebSock
 
-  def init(req, state) do
-    IO.inspect("SUBSCRIBE")
+  def init(_) do
     PubSub.subscribe(:rover_broker, "crash")
-    {:cowboy_websocket, req, state}
+    {:ok, %{}}
   end
 
-  def websocket_init(_state) do
-    state = %{}
+  def handle_in(_, state) do
     {:ok, state}
   end
 
-  def websocket_handle({:text, message}, state) do
-    IO.inspect(message, label: "RECEIVED")
-    {:reply, {:text, "hello world"}, state}
+  def handle_info(rover, state) do
+    {:push, {:text, JSON.encode!(project_state(rover))}, state}
   end
 
-  def websocket_info(info, state) do
-    IO.inspect({info, state}, label: "1>>>")
-    {:reply, state}
-  end
-
-  # No matter why we terminate, remove all of this pids subscriptions
-  def websocket_terminate(_reason, _req, _state) do
-    :ok
-  end
-
-  def handle_info(msg, socket) do
-    IO.inspect({msg, socket}, label: "2>>>")
-    {:noreply, socket}
+  defp project_state(rover) do
+    %{rover | pos: [elem(rover.pos, 0), elem(rover.pos, 1)]}
   end
 end
