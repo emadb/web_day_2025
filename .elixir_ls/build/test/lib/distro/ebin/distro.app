@@ -1,0 +1,13 @@
+{application,distro,
+             [{modules,['Elixir.Distro.Application',
+                        'Elixir.Distro.NodeObserver','Elixir.Distro.Router',
+                        'Elixir.Distro.Rover','Elixir.Distro.RoverSupervisor',
+                        'Elixir.Distro.SocketHandler','Elixir.U']},
+              {optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger,observer,wx,
+                             runtime_tools,libcluster,process_hub,bandit,plug,
+                             jason,phoenix_pubsub,websock_adapter]},
+              {description,"distro"},
+              {registered,[]},
+              {vsn,"0.1.0"},
+              {mod,{'Elixir.Distro.Application',[]}}]}.

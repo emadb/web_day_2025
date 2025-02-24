@@ -10,9 +10,8 @@ defmodule Distro.Application do
 
     children = [
       {Cluster.Supervisor, [topologies, [name: Distro.ClusterSupervisor]]},
-      {Horde.Registry, [members: :auto, keys: :unique, name: Distro.RoverRegistry]},
       {Phoenix.PubSub, name: :rover_broker},
-      Distro.HordeSupervisor,
+      ProcessHub.child_spec(%ProcessHub{hub_id: :my_hub}),
       Distro.NodeObserver
     ]
 

@@ -29,7 +29,7 @@ defmodule Distro.Router do
 
   get "/api/nodes" do
     nodes =
-      Distro.HordeSupervisor.members()
+      Distro.RoverSupervisor.members()
       |> Enum.map(fn {_, node} -> node end)
 
     conn
@@ -39,7 +39,7 @@ defmodule Distro.Router do
 
   get "/api/nodes/:name" do
     counters =
-      Horde.DynamicSupervisor.which_children(Distro.HordeSupervisor)
+      ProcessHub.which_children(Distro.RoverSupervisor)
       |> Enum.map(fn {_, pid, _, _} -> pid end)
       |> Enum.map(fn pid -> Distro.Rover.get_id(pid) end)
       |> Enum.map(fn id -> {id, Distro.Rover.node(id)} end)
@@ -57,7 +57,7 @@ defmodule Distro.Router do
 
   post "/api/rover" do
     id = Map.get(conn.body_params, "process_id")
-    {:ok, _} = Distro.HordeSupervisor.start_rover(id, random_coords())
+    {:ok, _} = Distro.RoverSupervisor.start_rover(id, random_coords())
 
     conn
     |> put_resp_content_type("application/json")

@@ -13,19 +13,19 @@ defmodule Distro.NodeObserver do
 
   def handle_info({:nodeup, node, _node_type}, state) do
     set_members(Distro.RoverRegistry)
-    set_members(Distro.HordeSupervisor)
+    set_members(Distro.RoverSupervisor)
     Logger.info("NEW NODE #{inspect(node)}")
     {:noreply, state}
   end
 
   def handle_info({:nodedown, _node, _node_type}, state) do
     set_members(Distro.RoverRegistry)
-    set_members(Distro.HordeSupervisor)
+    set_members(Distro.RoverSupervisor)
     {:noreply, state}
   end
 
   defp set_members(module) do
     members = Enum.map([Node.self() | Node.list()], &{module, &1})
-    :ok = Horde.Cluster.set_members(module, members)
+    # :ok = ProcessHub. .set_members(module, members)
   end
 end
