@@ -51,13 +51,21 @@ defmodule Distro.Router do
     |> send_resp(200, Jason.encode!(counters))
   end
 
+  get "/api/rover/:id" do
+    rover = Distro.Rover.get_state(String.to_integer(id))
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Jason.encode!(project_state(rover)))
+  end
+
   post "/api/rover" do
     id = Map.get(conn.body_params, "process_id")
     {:ok, _} = Distro.RoverManager.start_rover(id, random_coords())
 
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(%{message: "OK"}))
+    |> send_resp(201, Jason.encode!(%{message: "OK"}))
   end
 
   post "/api/rover/:id/command" do
@@ -66,7 +74,7 @@ defmodule Distro.Router do
 
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(state))
+    |> send_resp(201, Jason.encode!(state))
   end
 
   get "/" do

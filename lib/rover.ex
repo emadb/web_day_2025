@@ -1,5 +1,5 @@
 defmodule Distro.Rover do
-  use GenServer, restart: :transient
+  use GenServer
 
   def start_link([id, {x, y}, dir]) when dir in [:north, :south, :east, :west] do
     GenServer.start_link(__MODULE__, [id, {x, y}, dir], name: via_tuple(id))
@@ -10,16 +10,11 @@ defmodule Distro.Rover do
   end
 
   def init([id, {x, y}, dir]) do
-    Process.flag(:trap_exit, true)
     {:ok, %{id: id, pos: {x, y}, direction: dir, move_count: 0}, {:continue, :post_init}}
   end
 
   def get_state(id) do
     GenServer.call(via_tuple(id), :get_state)
-  end
-
-  def get_id(pid) do
-    GenServer.call(pid, :get_id)
   end
 
   def node(id) do
@@ -47,8 +42,8 @@ defmodule Distro.Rover do
       |> Enum.random()
       |> then(fn c -> move([c], state) end)
 
-    # crash? = Enum.random(1..10) == 1
-    crash? = false
+    # crash? = false
+    crash? = Enum.random(1..10) == 1
 
     if crash? do
       {:stop, :crash, new_state}
@@ -59,10 +54,6 @@ defmodule Distro.Rover do
 
   def handle_call(:get_state, _from, state) do
     {:reply, state, state}
-  end
-
-  def handle_call(:get_id, _from, state) do
-    {:reply, state.id, state}
   end
 
   def handle_call(:node, _from, state) do
