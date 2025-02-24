@@ -29,6 +29,10 @@ defmodule Distro.Rover do
     GenServer.call(via_tuple(id), {:send, [cmd]})
   end
 
+  def crash(id) do
+    GenServer.call(via_tuple(id), :crash)
+  end
+
   def handle_continue(:post_init, state) do
     Process.send_after(self(), :explore, Enum.random(1000..3000))
     {:noreply, state}
@@ -68,6 +72,10 @@ defmodule Distro.Rover do
     new_state = move(cmd, state)
 
     {:reply, :ok, new_state}
+  end
+
+  def handle_call(:crash, _from, state) do
+    {:crash, :boom, state}
   end
 
   def terminate(_reason, state) do

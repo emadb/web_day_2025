@@ -68,15 +68,18 @@
     const socket = new WebSocket("ws://localhost:4000/ws");
     socket.onmessage = (evt) => {
       const data = JSON.parse(evt.data);
-      log({ ...data, _m: "CRASHED" });
+      log(data, "CRASHED");
     };
 
-    function log(data) {
+    function log(data, level = "INFO") {
       const log = document.getElementById("log");
       let text = "";
       try {
         text =
           new Date().toISOString() +
+          " - " +
+          level +
+          " " +
           " >> " +
           JSON.stringify(data) +
           "\n" +
