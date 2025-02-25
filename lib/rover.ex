@@ -10,7 +10,7 @@ defmodule Distro.Rover do
   end
 
   def init([id, {x, y}, dir]) do
-    {:ok, %{id: id, pos: {x, y}, direction: dir, move_count: 0}, {:continue, :post_init}}
+    {:ok, %{id: id, pos: {x, y}, direction: dir, move_count: 0}}
   end
 
   def get_state(id) do
@@ -31,29 +31,6 @@ defmodule Distro.Rover do
 
   def crash(id) do
     GenServer.call(via_tuple(id), :crash)
-  end
-
-  def handle_continue(:post_init, state) do
-    Process.send_after(self(), :explore, Enum.random(1000..3000))
-    {:noreply, state}
-  end
-
-  def handle_info(:explore, state) do
-    Process.send_after(self(), :explore, Enum.random(1000..3000))
-
-    new_state =
-      ["L", "R", "F", "B"]
-      |> Enum.random()
-      |> then(fn c -> move([c], state) end)
-
-    # crash? = false
-    crash? = Enum.random(1..10) == 1
-
-    if crash? do
-      {:stop, :crash, new_state}
-    else
-      {:noreply, new_state}
-    end
   end
 
   def handle_call(:get_state, _from, state) do
