@@ -22,8 +22,8 @@
         <div class="card">
           <h3>Start new rover</h3>
           <div class="field">
-            <label for="start_process_id">Id:</label>
-            <input type="text" id="start_process_id" />
+            <label for="start_rover_id">Id:</label>
+            <input type="text" id="start_rover_id" />
           </div>
           <button onclick="startRover()">Start</button>
         </div>
@@ -99,18 +99,18 @@
     }
 
     function startRover() {
-      const id = parseInt(document.getElementById("start_process_id").value);
+      const id = parseInt(document.getElementById("start_rover_id").value);
       fetch(`/api/rover`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        body: JSON.stringify({ process_id: id }),
+        body: JSON.stringify({ rover_id: id }),
       })
         .then((response) => response.json())
         .then((data) => {
-          document.getElementById("start_process_id").value = "";
+          document.getElementById("start_rover_id").value = "";
           log(data);
           console.log(data);
         });

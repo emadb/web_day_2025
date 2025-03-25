@@ -1,4 +1,4 @@
-defmodule Distro.RoverManager do
+defmodule Distro.RoverSupervisor do
   def members() do
     Enum.map([Node.self() | Node.list()], &{__MODULE__, &1})
   end
