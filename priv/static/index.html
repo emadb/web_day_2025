@@ -2,65 +2,68 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <title>Elixir</title>
-    <style>
-      body {
-        padding-left: 50px;
-        padding-right: 50px;
-        font-size: large;
-        font-family: sans-serif;
-      }
-    </style>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <h1 style="color: #742e9c">Distributed Elixir</h1>
-    <fieldset>
-      <div>
-        <h3>Start new rover</h3>
-        Id: <input type="text" id="start_process_id" />
-        <button onclick="startRover()">Start</button>
-      </div>
-    </fieldset>
-    <fieldset>
-      <div>
-        <h3>Send a command</h3>
-        Id: <input type="text" id="rover_id" /> Command:
-        <input type="text" id="cmd" />
-        <button onclick="sendCommand()">Send</button>
-      </div>
-    </fieldset>
-    <fieldset>
-      <div>
-        <h3>Get state</h3>
-        Id: <input type="text" id="rover_state_id" />
-        <button onclick="getState()">Get</button>
-        <pre id="rover_state"></pre>
-      </div>
-    </fieldset>
-    <div>
-      <h3>Info</h3>
-      <button onClick="getNodes()">Get Nodes</button>
 
-      <ul id="nodes"></ul>
+  <body class="roboto">
+    <header class="title">
+      <h1>Distributed Elixir</h1>
+    </header>
+    <div class="container">
+      <article class="content">
+        <div class="card">
+          <h3>Start new rover</h3>
+          <div class="field">
+            <label for="start_process_id">Id:</label>
+            <input type="text" id="start_process_id" />
+          </div>
+          <button onclick="startRover()">Start</button>
+        </div>
+        <div class="card">
+          <h3>Send a command</h3>
+          <div class="field">
+            <label for="rover_id">Id:</label>
+            <input type="text" id="rover_id" />
+          </div>
+          <div class="field">
+            <label for="cmd">Command:</label>
+            <input type="text" id="cmd" />
+          </div>
+          <button onclick="sendCommand()">Send</button>
+        </div>
+        <div class="card">
+          <h3>Get state</h3>
+          <div class="field">
+            <label for="rover_state_id">Id:</label>
+            <input type="text" id="rover_state_id" />
+          </div>
+          <button onclick="getState()">Get</button>
+          <pre id="rover_state" class="rover-state"></pre>
+        </div>
+      </article>
+      <aside class="sidebar">
+        <div class="card">
+          <h3>Info</h3>
+          <button onClick="getNodes()">Get Nodes</button>
 
-      <h4 id="processes_node"></h4>
-      <ul id="processes"></ul>
-    </div>
-    <div>
-      <h3>Log</h3>
-      <pre
-        id="log"
-        style="
-          background-color: #eeeeee;
-          width: 100%;
-          white-space: pre-wrap;
-          word-wrap: break-word;
-          overflow-wrap: break-word;
-          border: 1px solid #ccc;
-          padding: 10px;
-        "
-      ></pre>
+          <ul id="nodes" class="nodes"></ul>
+
+          <h4 id="processes_node" class="process-node"></h4>
+          <ul id="processes" class="process"></ul>
+        </div>
+        <div class="card">
+          <h3>Log</h3>
+          <div id="log" class="log"></div>
+        </div>
+      </aside>
     </div>
   </body>
 
@@ -156,6 +159,7 @@
 
     function getButton(node) {
       const b = document.createElement("button");
+      b.classList.add("secondary-button");
       b.textContent = "Show Processes";
       b.addEventListener("click", () => getProcesses(node));
       return b;
@@ -173,11 +177,9 @@
           log(data);
           data.map((d) => {
             const li = document.createElement("li");
-            li.appendChild(
-              document.createTextNode(
-                `${d.id} | pos: [${d.pos}] count: ${d.move_count}`,
-              ),
-            );
+            const pre = document.createElement("pre");
+            pre.appendChild(document.createTextNode(JSON.stringify(d)));
+            li.appendChild(pre);
             ul.appendChild(li);
           });
         });
