@@ -58,6 +58,14 @@ input {
   border: 1px solid #cad3e2;
 }
 
+select {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #cad3e2;
+}
+
 button {
   display: inline-block;
   appearance: none;
