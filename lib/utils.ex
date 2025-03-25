@@ -1,6 +1,6 @@
 defmodule U do
   def list_nodes do
-    Distro.RoverManager.members()
+    Distro.RoverSupervisor.members()
     |> Enum.map(fn {_, n} -> n end)
   end
 
@@ -10,7 +10,7 @@ defmodule U do
 
   def start_rovers(n) do
     Enum.map(1..n, fn id ->
-      Distro.RoverManager.start_rover(id, {Enum.random(1..100), Enum.random(1..100)})
+      Distro.RoverSupervisor.start_rover(id, {Enum.random(1..100), Enum.random(1..100)})
     end)
   end
 

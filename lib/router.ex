@@ -29,7 +29,7 @@ defmodule Distro.Router do
 
   get "/api/nodes" do
     nodes =
-      Distro.RoverManager.members()
+      Distro.RoverSupervisor.members()
       |> Enum.map(fn {_, node} -> node end)
 
     conn
@@ -60,8 +60,8 @@ defmodule Distro.Router do
   end
 
   post "/api/rover" do
-    id = Map.get(conn.body_params, "process_id")
-    {:ok, _} = Distro.RoverManager.start_rover(id, random_coords())
+    id = Map.get(conn.body_params, "rover_id")
+    {:ok, _} = Distro.RoverSupervisor.start_rover(id, random_coords())
 
     conn
     |> put_resp_content_type("application/json")
