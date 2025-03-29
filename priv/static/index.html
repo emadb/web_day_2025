@@ -62,7 +62,7 @@
           <ul id="nodes" class="nodes"></ul>
 
           <h4 id="processes_node" class="process-node"></h4>
-          <ul id="processes" class="process"></ul>
+          <div id="processes" class="process"></div>
         </div>
         <div class="card">
           <h3>Log</h3>
@@ -177,16 +177,11 @@
           const title = document.getElementById("processes_node");
           title.innerText = `${node} (${data.length})`;
 
-          const ul = document.getElementById("processes");
-          ul.innerHTML = "";
+          const pre = document.getElementById("processes");
+          pre.innerHTML = "";
           log(data);
-          data.map((d) => {
-            const li = document.createElement("li");
-            const pre = document.createElement("pre");
-            pre.appendChild(document.createTextNode(JSON.stringify(d)));
-            li.appendChild(pre);
-            ul.appendChild(li);
-          });
+          const ids = data.map((d) => d.id).join(", ");
+          pre.appendChild(document.createTextNode(ids));
         });
     }
   </script>
