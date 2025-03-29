@@ -48,7 +48,7 @@ defmodule Distro.Rover do
       |> then(fn c -> move([c], state) end)
 
     # crash? = false
-    crash? = Enum.random(1..10) == 1
+    crash? = Enum.random(1..20) == 1
 
     if crash? do
       {:stop, :crash, new_state}
