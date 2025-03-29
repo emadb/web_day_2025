@@ -133,6 +133,7 @@ button {
 
 .process {
   list-style: none;
+  font-weight: 400;
 }
 
 .log {
