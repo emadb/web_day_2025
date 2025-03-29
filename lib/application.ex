@@ -10,7 +10,13 @@ defmodule Distro.Application do
 
     children = [
       {Cluster.Supervisor, [topologies, [name: Distro.ClusterSupervisor]]},
-      ProcessHub.child_spec(%ProcessHub{hub_id: :rover_hub}),
+      ProcessHub.child_spec(%ProcessHub{
+        hub_id: :rover_hub,
+        migration_strategy: %ProcessHub.Strategy.Migration.HotSwap{
+          retention: 3000,
+          handover: true
+        }
+      }),
       {Phoenix.PubSub, name: :rover_broker}
     ]
 

@@ -1,5 +1,6 @@
 defmodule Distro.Rover do
   use GenServer
+  use ProcessHub.Strategy.Migration.HotSwap
 
   def start_link([id, {x, y}, dir]) when dir in [:north, :south, :east, :west] do
     GenServer.start_link(__MODULE__, [id, {x, y}, dir], name: via_tuple(id))
