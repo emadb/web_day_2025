@@ -29,10 +29,6 @@ defmodule Distro.Rover do
     GenServer.call(via_tuple(id), {:send, [cmd]})
   end
 
-  def crash(id) do
-    GenServer.call(via_tuple(id), :crash)
-  end
-
   def handle_call(:get_state, _from, state) do
     {:reply, state, state}
   end
@@ -47,16 +43,7 @@ defmodule Distro.Rover do
 
   def handle_call({:send, cmd}, _from, state) do
     new_state = move(cmd, state)
-
     {:reply, :ok, new_state}
-  end
-
-  def handle_call(:crash, _from, state) do
-    {:crash, :boom, state}
-  end
-
-  def terminate(_reason, state) do
-    Phoenix.PubSub.broadcast(:rover_broker, "crash", state)
   end
 
   defp move(cmd, state) do

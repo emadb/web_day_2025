@@ -21,8 +21,4 @@ defmodule U do
   def get_state(id) do
     Distro.Rover.get_state(id)
   end
-
-  def crash(id) do
-    Distro.Rover.crash(id)
-  end
 end
